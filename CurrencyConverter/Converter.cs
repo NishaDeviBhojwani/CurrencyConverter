@@ -1,81 +1,77 @@
-﻿using System;
-using System.Formats.Asn1;
-
-namespace CurrencyConverter
+﻿namespace CurrencyConverter
 {
     public class Converter
     {
-        private static readonly string[] lengthInToMod = new[]
+        private static readonly string[] numberInWords = new[]
         {
-            "hundred", "thousand", "million"
+            "hundred ", "thousand ", "million "
         };
-        public string GetDigitsIntoNumbers(string inNumbers)
+        public string GetNumIntoWords(string inNumbers)
         {
+            string words = "";
             string[] wholeAndDecimalPart = inNumbers.Split(',');
-            string result = "";
             string[] wholePart = wholeAndDecimalPart[0].Split(' ');
 
-            // Whole Part Logic
             for (int i = 0; i < wholePart.Length; i++)
             {
                 int part = int.Parse(wholePart[i]);
+                if (part <= 0)
+                    continue;
+
                 int lengthOfWholenumber = wholePart[i].Length;
-
-                // 139 -> Length = 3
-
-                string words = (lengthOfWholenumber == 3) ? "hunderd" : "";
-
                 int temp = (int)Math.Pow(10.0, lengthOfWholenumber - 1);
 
                 int firstdigit = part / temp;
                 if (firstdigit != 0)
-                    result += $"{GetOnes(firstdigit)} {words} ";
+                    words += $"{GetOnes(firstdigit)}{((lengthOfWholenumber == 3) ? " hunderd " : "")} ";
 
                 int remainingDigit = part % temp;
-                result += $" {GetTens((remainingDigit / 10) * 10)}";
-                result += $" {GetOnes(remainingDigit % 10)} ";
+                words += $"{GetTens((remainingDigit / 10) * 10)} ";
+                words += $"{GetOnes(remainingDigit % 10)} ";
 
-                if(i  != wholePart.Length - 1)
-                    result +=  lengthInToMod[wholePart.Length - i - 1];
+                if (i != wholePart.Length - 1)
+                    words += numberInWords[wholePart.Length - i - 1];
             }
 
-            result += " dollars ";
-            result = CentsLogic(wholeAndDecimalPart, result);
-            return result;
+            words += "dollars ";
+            if (wholeAndDecimalPart[1].Length > 0)
+            {
+                words += $" and {CentsLogic(wholeAndDecimalPart[1])}";
+            }
+
+            return words;
         }
 
-        private string CentsLogic(string[] numbers, string num)
+        private string CentsLogic(string centNumbers)
         {
-            //char[] cents = numbers[1].ToCharArray();
-            int cents = int.Parse(numbers[1]);
-            string centNumber = "";
+            if (centNumbers.Length == 1)
+            {
+                centNumbers += "0";
+            }
+
+            int cents = int.Parse(centNumbers);
+            string centWords = "";
             if (cents > 0)
             {
-                bool isOneDigit = false;
-                int temp = cents / 10;
-                if (temp == 0)
+                int digits = cents / 10;
+                if (digits > 0)
                 {
-                    temp = cents;
-                    isOneDigit = true;
-                }
-                if (temp > 0)
-                {
-                    centNumber = GetTens(temp * 10);
+                    centWords = GetTens(digits * 10);
                 }
 
-                temp = cents % 10;
-                if (temp > 0 && !isOneDigit)
+                digits = cents % 10;
+                if (digits > 0)
                 {
-                    centNumber += $" {GetOnes(temp)}";
+                    centWords += $"{GetOnes(digits)} ";
                 }
             }
 
-            if (centNumber.Length > 0)
+            if (centWords.Length > 0)
             {
-                num += $"{centNumber} cents";
+                centWords += $" cents";
             }
 
-            return num;
+            return centWords;
         }
 
         public string GetOnes(int number)

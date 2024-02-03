@@ -6,11 +6,6 @@ namespace CurrencyConverter.Controllers
     [ApiController]
     public class CurrencyController : ControllerBase
     {
-        private static readonly string[] lengthInToMod = new[]
-        {
-            "", "", "hundred", "thousand", "ten thousand", "hundred thousand", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
         private readonly ILogger<CurrencyController> _logger;
 
         public CurrencyController(ILogger<CurrencyController> logger)
