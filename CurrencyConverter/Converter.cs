@@ -23,9 +23,16 @@
 
                 int firstdigit = part / temp;
                 if (firstdigit != 0)
-                    words += $"{GetOnes(firstdigit)}{((lengthOfWholenumber == 3) ? " hunderd " : "")} ";
+                    words += $"{GetOnes(firstdigit)}{((lengthOfWholenumber == 3) ? " hunderd" : "")} ";
 
                 int remainingDigit = part % temp;
+                if (remainingDigit.ToString().Length == 2)
+                {
+                    var val = GetTens(remainingDigit);
+                    if (val != string.Empty)
+                        words += $"{val} ";
+                    continue;
+                }
                 words += $"{GetTens((remainingDigit / 10) * 10)} ";
                 words += $"{GetOnes(remainingDigit % 10)} ";
 
@@ -34,10 +41,12 @@
             }
 
             words += "dollars ";
-            if (wholeAndDecimalPart[1].Length > 0)
+            if (wholeAndDecimalPart[1].Length > 0 && words.Length != 0)
             {
-                words += $" and {CentsLogic(wholeAndDecimalPart[1])}";
+                words += "and ";
             }
+
+            words += $"{CentsLogic(wholeAndDecimalPart[1])}";
 
             return words;
         }
@@ -62,23 +71,22 @@
                 digits = cents % 10;
                 if (digits > 0)
                 {
-                    centWords += $"{GetOnes(digits)} ";
+                    centWords += $" {GetOnes(digits)} ";
                 }
             }
 
             if (centWords.Length > 0)
             {
-                centWords += $" cents";
+                centWords += $"cents";
             }
 
             return centWords;
         }
 
-        public string GetOnes(int number)
+        private string GetOnes(int number)
         {
             return number switch
             {
-                0 => "Zero",
                 1 => "one",
                 2 => "two",
                 3 => "three",
@@ -92,7 +100,7 @@
             };
         }
 
-        public string GetTens(int number)
+        private string GetTens(int number)
         {
             return number switch
             {
