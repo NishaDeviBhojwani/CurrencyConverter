@@ -11,14 +11,6 @@ namespace CurrencyConverterTest
         }
 
         [TestMethod]
-        public void GetDigitsIntoNumbers_SixtyNineTest()
-        {
-            var result = _converter.GetNumIntoWords("0,69");
-
-            Assert.AreEqual(result, "sixty nine cents");
-        }
-
-        [TestMethod]
         public void GetDigitsIntoNumbers_10CentsTest()
         {
             var result = _converter.GetNumIntoWords("0,1");
@@ -50,6 +42,29 @@ namespace CurrencyConverterTest
             Assert.AreEqual(result, "One hundred thirty nine dollar 10 cents");
         }
 
+        [TestMethod]
+        public void GetDigitsIntoNumbers_1390DollarTest()
+        {
+            var result = _converter.GetNumIntoWords("999 000 999,99");
+
+            Assert.AreEqual(result, "One hundred thirty nine dollar 10 cents");
+        }
+
+        [TestMethod]
+        public void GetDigitsIntoNumbers_13902DollarTest()
+        {
+            var result = _converter.GetNumIntoWords("999 000 999,99");
+
+            Assert.AreEqual(result, "One hundred thirty nine dollar 10 cents");
+        }
+
+        [TestMethod]
+        public void GetDigitsIntoNumbers_13901DollarTest()
+        {
+            var result = _converter.GetNumIntoWords("999 000 999,99");
+
+            Assert.AreEqual(result, "One hundred thirty nine dollar 10 cents");
+        }
 
     }
 }

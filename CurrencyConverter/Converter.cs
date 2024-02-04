@@ -19,6 +19,13 @@
                     continue;
 
                 int lengthOfWholenumber = wholePart[i].Length;
+                if( lengthOfWholenumber == 2)
+                {
+                    var val = GetTens(part);
+                    if (val != string.Empty)
+                        words += $"{val} ";
+                    continue;
+                }
                 int temp = (int)Math.Pow(10.0, lengthOfWholenumber - 1);
 
                 int firstdigit = part / temp;
@@ -41,7 +48,7 @@
             }
 
             words += "dollars ";
-            if (wholeAndDecimalPart[1].Length > 0 && words.Length != 0)
+            if (!(wholeAndDecimalPart[1] is null) && words.Length != 0)
             {
                 words += "and ";
             }
