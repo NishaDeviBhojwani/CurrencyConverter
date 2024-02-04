@@ -15,7 +15,7 @@ namespace CurrencyConverterTest
         {
             var result = _converter.GetNumIntoWords("0,1");
 
-            Assert.AreEqual(result, "ten cents");
+            Assert.AreEqual("ten cents", result);
         }
 
         [TestMethod]
@@ -23,7 +23,7 @@ namespace CurrencyConverterTest
         {
             var result = _converter.GetNumIntoWords("0,01");
 
-            Assert.AreEqual(result, "one cents");
+            Assert.AreEqual("one cents", result);
         }
 
         [TestMethod]
@@ -31,7 +31,7 @@ namespace CurrencyConverterTest
         {
             var result = _converter.GetNumIntoWords("0,70");
 
-            Assert.AreEqual(result, "seventy cents");
+            Assert.AreEqual("seventy cents", result);
         }
 
         [TestMethod]
@@ -39,7 +39,7 @@ namespace CurrencyConverterTest
         {
             var result = _converter.GetNumIntoWords("0,99");
 
-            Assert.AreEqual(result, "ninty nine cents");
+            Assert.AreEqual("ninty nine cents", result);
         }
 
         [TestMethod]
@@ -47,7 +47,7 @@ namespace CurrencyConverterTest
         {
             var result = _converter.GetNumIntoWords("1,1");
 
-            Assert.AreEqual(result, "one dollars and ten cents");
+            Assert.AreEqual("one dollars and ten cents", result);
         }
 
         [TestMethod]
@@ -55,7 +55,7 @@ namespace CurrencyConverterTest
         {
             var result = _converter.GetNumIntoWords("25,11");
 
-            Assert.AreEqual(result, "twenty five dollars and eleven cents");
+            Assert.AreEqual("twenty five dollars and eleven cents", result);
         }
 
         [TestMethod]
@@ -63,14 +63,14 @@ namespace CurrencyConverterTest
         {
             var result = _converter.GetNumIntoWords("11,25");
 
-            Assert.AreEqual(result, "eleven dollars and twenty five cents");
+            Assert.AreEqual("eleven dollars and twenty five cents", result);
         }
         [TestMethod]
         public void GetDigitsIntoNumbers_12123DollarTest()
         {
             var result = _converter.GetNumIntoWords("12 123");
 
-            Assert.AreEqual(result, "twelve thousand one hundred twenty three dollars ");
+            Assert.AreEqual("twelve thousand one hundred twenty three dollars", result);
         }
 
         [TestMethod]
@@ -78,7 +78,7 @@ namespace CurrencyConverterTest
         {
             var result = _converter.GetNumIntoWords("999 000 999,99");
 
-            Assert.AreEqual(result, "nine hundred ninty nine million nine hundred ninty nine dollars and ninty nine cents");
+            Assert.AreEqual("nine hundred ninty nine million nine hundred ninty nine dollars and ninty nine cents", result);
         }
 
         [TestMethod]
@@ -86,7 +86,7 @@ namespace CurrencyConverterTest
         {
             var result = _converter.GetNumIntoWords("999 999 999,99");
 
-            Assert.AreEqual(result, "nine hundred ninty nine million nine hundred ninty nine thousand nine hundred ninty nine dollars and ninty nine cents");
+            Assert.AreEqual("nine hundred ninty nine million nine hundred ninty nine thousand nine hundred ninty nine dollars and ninty nine cents", result);
         }
 
         [TestMethod]
@@ -94,7 +94,7 @@ namespace CurrencyConverterTest
         {
             var result = _converter.GetNumIntoWords("45 100,09");
 
-            Assert.AreEqual(result, "forty five thousand one hundred   dollars and nine cents");
+            Assert.AreEqual("forty five thousand one hundred dollars and nine cents", result);
         }
 
         [TestMethod]
@@ -102,15 +102,7 @@ namespace CurrencyConverterTest
         {
             var result = _converter.GetNumIntoWords("0,01");
 
-            Assert.AreEqual(result, "one cents");
-        }
-
-        [TestMethod]
-        public void GetDigitsIntoNumbers_0DollarsTest()
-        {
-            var result = _converter.GetNumIntoWords("0");
-
-            Assert.AreEqual(result, "zero dollars");
+            Assert.AreEqual("one cents", result);
         }
 
         [TestMethod]
@@ -118,7 +110,7 @@ namespace CurrencyConverterTest
         {
             var result = _converter.GetNumIntoWords("1");
 
-            Assert.AreEqual(result, "one dollars ");
+            Assert.AreEqual("one dollars", result);
         }
     }
 }

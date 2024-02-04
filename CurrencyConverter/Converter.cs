@@ -1,14 +1,22 @@
-﻿namespace CurrencyConverter
+﻿using System;
+
+namespace CurrencyConverter
 {
     public class Converter
     {
         private static readonly string[] numberInWords = new[]
         {
-            "hundred ", "thousand ", "million "
+            "hundred", "thousand", "million"
         };
+
+        private static List<string> result;
+
+        public Converter() { 
+            result = new List<string>();
+        }
+
         public string GetNumIntoWords(string inNumbers)
         {
-            string words = "";
             string[] wholeAndDecimalPart = inNumbers.Split(',');
 
             // If string is not in right format
@@ -25,24 +33,25 @@
                 if (wholePart is null)
                     return "Invalid String";
 
-                words = DollarsLogic(wholePart);
-                if (words.Length != 0)
-                    words += "dollars ";
+                AddIfNotEmpty(result, DollarsLogic(wholePart));
+                if (result.Count != 0)
+                    AddIfNotEmpty(result, "dollars");
             }
 
             // Dollars and Cents
-            if (wholeAndDecimalPart.Length > 1 && wholeAndDecimalPart[1].Length > 1 && words.Length > 1)
+            if (result.Count > 1 && wholeAndDecimalPart.Length>1)
             {
-                words += "and ";
+                AddIfNotEmpty(result, "and");
             }
 
             // Cents Logic
             if (wholeAndDecimalPart.Length == 2 && wholeAndDecimalPart[1] is not null)
             {
-                words += $"{CentsLogic(wholeAndDecimalPart[1])}";
+                CentsLogic(wholeAndDecimalPart[1]);
+                AddIfNotEmpty(result, "cents");
             }
 
-            return words;
+            return String.Join(" ", result.ToArray());
         }
 
         private static string DollarsLogic(string[] wholePart)
@@ -57,51 +66,49 @@
                 int lengthOfWholenumber = wholePart[i].Length;
                 if (lengthOfWholenumber <= 2)
                 {
-                    words = TwoDigitLogic(part);
+                    TwoDigitLogic(part);
                     if (i != wholePart.Length - 1)
-                        words += numberInWords[wholePart.Length - i - 1];
+                        AddIfNotEmpty(result, numberInWords[wholePart.Length - i - 1]);
                     continue;
-                   /* var val = GetOnes(part);
-                    if (val != string.Empty)
-                    {
-                        words += $"{val} ";
-                        continue;
-                    }
-
-                    val = GetTens(part);
-                    if (val != string.Empty)
-                    {
-                        words += $"{val} ";
-                        continue;
-                    }*/
                 }
                 int temp = (int)Math.Pow(10.0, lengthOfWholenumber - 1);
 
                 int firstdigit = part / temp;
                 if (firstdigit != 0)
-                    words += $"{GetOnes(firstdigit)}{((lengthOfWholenumber == 3) ? " hundred" : "")} ";
-
+                {
+                    AddIfNotEmpty(result, GetOnes(firstdigit));
+                    if(lengthOfWholenumber == 3)
+                        AddIfNotEmpty(result, "hundred");
+                }
                 int remainingDigit = part % temp;
                 if (remainingDigit.ToString().Length == 2)
                 {
                     var val = GetTens(remainingDigit);
                     if (val != string.Empty)
                     {
-                        words += $"{val} ";
+                        AddIfNotEmpty(result, val);
                         continue;
                     }
                 }
-                words += $"{GetTens((remainingDigit / 10) * 10)} ";
-                words += $"{GetOnes(remainingDigit % 10)} ";
+                AddIfNotEmpty(result, GetTens((remainingDigit / 10) * 10));
+                AddIfNotEmpty(result, GetOnes(remainingDigit % 10));
 
                 if (i != wholePart.Length - 1)
-                    words += numberInWords[wholePart.Length - i - 1];
+                    AddIfNotEmpty(result, numberInWords[wholePart.Length - i - 1]);
             }
 
             return words;
         }
 
-        private static string CentsLogic(string centNumbers)
+        private static void AddIfNotEmpty(List<string> result, string value)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                result.Add(value);
+            }
+        }
+
+        private static void CentsLogic(string centNumbers)
         {
             if (centNumbers.Length == 1)
             {
@@ -109,43 +116,33 @@
             }
 
             int cents = int.Parse(centNumbers);
-            string centWords = "";
             if (cents > 0)
             {
-                centWords = TwoDigitLogic(cents);
+                TwoDigitLogic(cents);
             }
-
-            if (centWords.Length > 0)
-            {
-                centWords += $"cents";
-            }
-
-            return centWords;
         }
 
-        private static string TwoDigitLogic(int num)
+        private static void TwoDigitLogic(int num)
         {
-            string words = "";
             var val = GetTens(num);
             if (val != string.Empty)
             {
-                words += $"{val} ";
+                AddIfNotEmpty(result, val);
             }
             else
             {
                 int digits = num / 10;
                 if (digits > 0)
                 {
-                    words = $"{GetTens(digits * 10)} ";
+                    AddIfNotEmpty(result, GetTens(digits * 10));
                 }
 
                 digits = num % 10;
                 if (digits > 0)
                 {
-                    words += $"{GetOnes(digits)} ";
+                    AddIfNotEmpty(result, GetOnes(digits));
                 }
             }
-            return words;
         }
 
         private static string GetOnes(int number)
